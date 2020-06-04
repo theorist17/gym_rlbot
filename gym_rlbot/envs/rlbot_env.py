@@ -18,60 +18,55 @@ joint_info_name = ["index", "name", "type", "qIndex", "uIndex", "flags",
                    "linkName", "axis", "parentFramePos", "parentFrameOrn", "parentIndex"]
 joint_state_name = ["position", "velocity", "reactionForces", "torque"]
 
+
 class DeviceManager():
-    def __init__(self, bot_id, num_joint):
-        self.bot_id = bot_id
-        self.num_joint = num_joint
+    def __init__(self):
+        self.client_id = None
+        self.bot_id = None
+
         self.enc = None
-        self.tilt = None
         self.gyro = None
+        self.tilt = None
 
-        #TODO create camera, camera angle, and IR sensor
+        self.thread_read = threading.Thread(target=None)
 
-        self.thread_read_on = True
-        self.thread_read = threading.Thread(target=self._read(), args=None)
-        self.thread_read.start()
-
+        # TODO create camera, camera angle, and IR sensor
     def _read_encoder(self):
         '''
         get the signals from the motor encoders
-        :return: sig_enc
+        :return: sig_enc : numpy array of singals, can be set to None
         '''
-        sig_enc = pb.getJointStates(self.bot_id, jointIndices=range(self.num_joint))
-        sig_enc = np.array([round(signal[0], 2) for signal in sig_enc])
-        return sig_enc
+
+        sig_enc = pb.getJointStates(self.bot_id, jointIndices=range(pb.getNumJoints(self.bot_id)))
+        if sig_enc:
+            self.enc = np.array([round(sig[0], 2) for sig in sig_enc])
 
     def _read_gyro(self):
         '''
         get the signals from the gyroscope sensor
         :return: sig_gyro
         '''
-        sig_gyro = ()
-        return sig_gyro
+        gyro = (0, 0)
+        self.gyro = gyro if gyro is not None else self.gyro
 
     def _read_tilt(self):
         '''
         get the signals from the tilt sensor
         :return: sig_tilt
         '''
-        sig_tilt = ()
-        return sig_tilt
+        tilt = (0, 0)
+        self.tilt = tilt if tilt is not None else self.tilt
 
     def _read(self):
         '''
         keeps reading and updating each value of encoder, gyro, tilt sensor whenever possible
         :return:
         '''
+
         while self.thread_read_on:
-            enc = self._read_encoder()
-            # TODO check if thread is working by logging on pybullet
-            self.enc = enc if any(enc) else self.enc
-
-            gyro = self._read_gyro()
-            self.gyro = gyro if any(gyro) else self.gyro
-
-            tilt = self._read_tilt()
-            self.tilt = tilt if any(tilt) else self.tilt
+            self._read_encoder()
+            self._read_gyro()
+            self._read_tilt()
 
     def write_decoder(self, action):
         '''
@@ -84,24 +79,37 @@ class DeviceManager():
         signals = action
 
         pb.setJointMotorControlArray(
-            bodyUniqueId=self.bot_id, jointIndices=range(self.num_joint), controlMode=pb.POSITION_CONTROL,
+            bodyUniqueId=self.bot_id, jointIndices=range(pb.getNumJoints(self.bot_id)), controlMode=pb.POSITION_CONTROL,
             targetPositions=signals)
 
         return True
 
-    def reset(self, bot_id, num_joint):
-        self.bot_id = bot_id
-        self.num_joint = num_joint
+    def start_device_manager(self, client_id, bot_id):
 
-        self.thread_read_on = False
-        self.thread_read.join()
+        self.client_id = client_id
+        self.bot_id = bot_id
+
+        assert pb.isConnected(self.client_id) == True
+
+        while self.enc is None:
+            self._read_encoder()
+        while self.gyro is None:
+            self._read_gyro()
+        while self.tilt is None:
+            self._read_tilt()
 
         self.thread_read_on = True
-        self.thread_read = threading.Thread(target=self._read(), args=None)
+        self.thread_read = threading.Thread(target=self._read)
         self.thread_read.start()
+
+    def stop_device_manager(self):
+        self.thread_read_on = False
+        if self.thread_read.is_alive():
+            self.thread_read.join()
 
 
 mutex = threading.Lock()
+
 
 class Localization():
     def __init__(self, device_manager, position=None, orientation=None, global_map=None):
@@ -110,13 +118,7 @@ class Localization():
         self.ori = position
         self.gmap = global_map
 
-        self.thread_odometry_on = True
-        self.thread_odometry = threading.Thread(target=self._odometry(), args=None)
-        self.thread_odometry.start()
-
-        self.thread_localization_on = True
-        self.thread_localization = threading.Thread(target=self._localization(), args=None)
-        self.thread_localization.start()
+        self.start_localization()
 
     def _odometry(self):
         '''
@@ -130,7 +132,7 @@ class Localization():
             gyro = self.dm.gyro
             tilt = self.dm.tilt
 
-            # TODO perform odometry of calculating position, orientation of robot using the values of enc, gyro, tilt
+            # TODO perform odometry of calculating position, orientation of robot using the values of enc, gyro, tilt (오도메트리)
 
             mutex.acquire()
             self.pos = (0, 0, 0)
@@ -152,7 +154,7 @@ class Localization():
 
         return position, orientation, global_map
 
-    def _localization(self):
+    def _match(self):
         '''
         perform odometry and perception to locate the robot and its surrounding
         :return: position, orientation, local_map
@@ -170,21 +172,22 @@ class Localization():
             self.gmap = new_gmap if new_gmap else self.gmap
             mutex.release()
 
-    def reset(self):
+    def start_localization(self):
+        self.thread_odometry_on = True
+        self.thread_odometry = threading.Thread(target=self._odometry)
+        self.thread_odometry.start()
 
+        self.thread_localization_on = True
+        self.thread_localization = threading.Thread(target=self._match)
+        self.thread_localization.start()
+
+    def stop_localization(self):
         self.thread_odometry_on = False
         self.thread_odometry.join()
 
         self.thread_localization_on = False
         self.thread_localization.join()
 
-        self.thread_odometry_on = True
-        self.thread_odometry = threading.Thread(target=self._odometry(), args=None)
-        self.thread_odometry.start()
-
-        self.thread_localization_on = True
-        self.thread_localization = threading.Thread(target=self._localization(), args=None)
-        self.thread_localization.start()
 
 # 0 BODY, LL1 (heap), LL2 (thigh), LL3 (jong), LL4 (ankle), LL5 (foot),
 # LR1 (heap), LR2 (thigh), LR3 (jong), LR4 (ankle), LR5 (foot),
@@ -199,64 +202,45 @@ class RlbotEnv(gym.Env):
 
     def __init__(self, mode='GUI'):
         # pybullet
-        pb.connect(pb.GUI)  # if mode == 'GUI' else pb.connect(pb.DIRECT)
-        pb.setTimeStep(1.0/240)  # default 240 hz, Time steps larger than 1./60 can introduce instabilities for various reasons (deep penetrations, numerical integrator)
-        pb.setGravity(0, 0, -10)
-        # pb.setRealTimeSimulation(1)
-
-        # camera setup
-        pb.resetDebugVisualizerCamera(cameraDistance=0.8, cameraYaw=0, cameraPitch=-30, cameraTargetPosition=[0, 0, 0])
-
-        # capture for getCameraImage
-        pixelWidth = 1000
-        pixelHeight = 1000
-        camTargetPos = [0, 0, 0]
-        camDistance = 0.5
-        pitch = -10.0
-        roll = 0
-        upAxisIndex = 2
-        yaw = 0
-        viewMatrix = pb.computeViewMatrixFromYawPitchRoll(camTargetPos, camDistance, yaw, pitch, roll, upAxisIndex)
+        self.client_id = pb.connect(pb.GUI)  # if mode == 'GUI' else pb.connect(pb.DIRECT)
 
         # path
         pb.setAdditionalSearchPath(pybullet_data.getDataPath())
         dir_name = os.path.dirname(__file__)
         self.button_urdf_path = os.path.join(dir_name, '../../assets/button/urdf/simple_button.urdf')
-        self.bot_urdf_path = os.path.join(dir_name, '../../assets/ARLBOT_URDF/urdf/ARLBOT_URDF.xml')
+        self.bot_urdf_path = os.path.join(dir_name, '../../assets/rlbot_urdf/urdf/rlbot_urdf.xml')
+
+        # camera setup
+        pb.resetDebugVisualizerCamera(cameraDistance=0.8, cameraYaw=0, cameraPitch=-30, cameraTargetPosition=[0, 0, 0])
 
         # plane
         self.plane_id = pb.loadURDF("plane.urdf")
 
         # robot
-        self.bot_base_pos = [0, 0, 0.2]  # TODO 몸통이 베이스니까 기본포지션 0, 0, 0으로 못 잡겠는데, 이거 베이스를 발?로 하는 게 좋은지 생각해보자
+        self.bot_base_pos = [0, 0, 0.05]
         self.bot_base_ori = pb.getQuaternionFromEuler([-1.5708, 0, 0])  # 1.5708 rad = 90 degree
-        self.bot_id = pb.loadURDF(self.bot_urdf_path, basePosition=self.bot_base_pos, baseOrientation=self.bot_base_ori)
-        # TODO URDF 패키 이름 ARLBOT_URDF를 rlbot 으로 바꾸자. 지링크랑 조인트 이름 다 바꾸자. 주말에 만나서. 문서 참고.
         # TODO URDF 공식 문서 정독 http://wiki.ros.org/urdf/XML jointType -> revolute - a hinge joint that rotates along the axis and has a limited range specified by the upper and lower limits. soft_upper_limit 이런거 처리하기
         # TODO URDF Sensor의 Camera와 Ray 뭔지 연구하고 공유하기.
-        # TODO URDF 로봇 어깨가 안나온다 : URDF 확인완, pybullet 확인완, Link AR1 - Joint AR1 - body 간의 문제로 추정. AR2 Link의 mesh에 scale="2"를 추가하면 동떨어진 메쉬가 보인다. 로봇 어깨 메시 고치기
-        self.num_joint = pb.getNumJoints(self.bot_id)
 
         #  button
-        self.button_base_pos = [0.1, 0, 0]  # TODO 몸통이 베이스니까 기본포지션 0, 0, 0으로 못 잡겠는데, 이거 베이스를 발?로 하는 게 좋은지 생각해보자
+        self.button_base_pos = [0.1, 0, 0]
         self.button_base_ori = pb.getQuaternionFromEuler([-1.5708, 0, 0])  # 1.5708 rad = 90 degree
-        self.button_id = pb.loadURDF(self.button_urdf_path, basePosition=self.button_base_pos, baseOrientation=self.button_base_ori)
+
+        # gym
+        # TODO update observation_space according to URDF
+        self.observation_space = Box(low=np.array([-1.5] * 16), high=np.array([1.5] * 16), dtype=np.float16)
+        self.action_space = Discrete(16)
+        self.goal = np.array(0.0 * 16)
 
         # device manager
-        self.dm = DeviceManager(self.bot_id, self.num_joint)
+        self.dm = DeviceManager()
 
         # localization
         self.lc = Localization(self.dm)
 
-        # gym
-        # TODO update observation_space according to URDF
-        self.observation_space = Box(low=np.array([-1.5] * self.num_joint), high=np.array([1.5] * self.num_joint), dtype=np.float16)
-        self.action_space = Discrete(self.num_joint)
-        self.goal = np.array([1] * self.num_joint)
-
     def step(self, action):
         if self.dm.write_decoder(action):
-            pb.stepSimulation(10)
+            pb.stepSimulation()
 
         observation = self.observe()
         reward = self.evaluate(observation)
@@ -268,12 +252,24 @@ class RlbotEnv(gym.Env):
     def reset(self):
         pb.resetSimulation()
 
-        self.plane_id = pb.loadURDF("plane.urdf")
-        self.bot_id = pb.loadURDF(self.bot_urdf_path, basePosition=self.bot_base_pos, baseOrientation=self.bot_base_ori)
-        self.button_id = pb.loadURDF(self.button_urdf_path, basePosition=self.button_base_pos, baseOrientation=self.button_base_ori)
+        pb.setTimeStep(1./60)  # default 240 hz, Time steps larger than 1./60 can introduce instabilities for various reasons (deep penetrations, numerical integrator)
+        pb.setGravity(0, 0, -10)
+        pb.setRealTimeSimulation(0)
 
-        self.dm.reset()
-        self.lc.reset()
+        # model load
+        self.plane_id = pb.loadURDF("plane.urdf")
+        self.bot_id = pb.loadURDF(self.bot_urdf_path, self.bot_base_pos, self.bot_base_ori)
+        self.button_id = pb.loadURDF(self.button_urdf_path, self.button_base_pos, self.button_base_ori)
+
+        # reset devices
+        self.dm.stop_device_manager()
+        self.lc.stop_localization()
+        self.dm.start_device_manager(self.client_id, self.bot_id)
+        self.lc.start_localization()
+
+        next_state = self.observe()
+
+        return next_state
 
     def render(self):
         pass
@@ -304,11 +300,11 @@ class RlbotEnv(gym.Env):
         gyro = self.dm.gyro
         pos = self.lc.pos
         ori = self.lc.ori
-        gmap = self.gmap
+        gmap = self.lc.gmap
 
-        state = np.array([enc])
+        state = np.array(enc)
 
-        #TODO observation state definition
+        # TODO observation state definition
 
         observation = state
 
@@ -331,21 +327,32 @@ class RlbotEnv(gym.Env):
             1. failed to find the right direction toward the goal
             2. failed to go straight once it find the right direction
             3. failed to balance while walking
-            4. failed to keep the speed
-            5. failed to get back up after falling down
+            4. failed to get back up after falling down
         else false
         :return: done
         '''
-        done = True
+        done = False
         return done
+
+    def capture(self):
+        # capture for getCameraImage
+        pixelWidth = 1000
+        pixelHeight = 1000
+        camTargetPos = [0, 0, 0]
+        camDistance = 0.5
+        yaw = 0
+        pitch = -10.0
+        roll = 0
+        upAxisIndex = 2
+        viewMatrix = pb.computeViewMatrixFromYawPitchRoll(camTargetPos, camDistance, yaw, pitch, roll, upAxisIndex)
+        pb.resetSimulation()
+
 
 class DummyNet():
     def __init__(self):
-        self.d = 0.0
-
+        pass
     def predict(self, state):
-        self.action = np.array([self.d] * len(state))
-        self.d += 0.01
+        self.action = np.array([0] * len(state))
         return self.action
 
 
@@ -357,7 +364,7 @@ if __name__ == '__main__':
         next_state = env.reset()
         score = 0
 
-        while True:
+        for i in range(10000):
             action = model.predict(next_state)
             observation, reward, done, info = env.step(action)
 
@@ -365,9 +372,9 @@ if __name__ == '__main__':
             score += reward
 
             env.render()
-
+            time.sleep(0.1)
             if done:
-                print(score)
+                print('score', score)
                 break
 
     env.close()

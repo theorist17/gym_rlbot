@@ -1,0 +1,1039 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by Stephen Brawner (brawner@gmail.com) 
+     Commit Version: 1.5.1-0-g916b5db  Build Version: 1.5.7152.31018
+     For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
+<robot
+  name="rlbot_urdf">
+  <link
+    name="body">
+    <inertial>
+      <origin
+        xyz="-0.000776336245526546 -0.0994792446270345 0.00434529494192139"
+        rpy="0 0 0" />
+      <mass
+        value="0.0594129439403149" />
+      <inertia
+        ixx="4.10350614646922E-05"
+        ixy="-1.00811014052065E-06"
+        ixz="-1.88563093285872E-22"
+        iyy="1.22444944615428E-05"
+        iyz="2.52022587432619E-21"
+        izz="3.30257173458162E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://rlbot_urdf/meshes/body.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://rlbot_urdf/meshes/body.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <link
+    name="heap_left">
+    <inertial>
+      <origin
+        xyz="-0.000411505722172199 2.8557399431306E-09 -0.00865063394349094"
+        rpy="0 0 0" />
+      <mass
+        value="0.00641562289097095" />
+      <inertia
+        ixx="6.40403705232279E-07"
+        ixy="6.33785112740125E-16"
+        ixz="3.3480580581693E-12"
+        iyy="5.39585585576184E-07"
+        iyz="-3.31477551401615E-14"
+        izz="2.80842564475839E-07" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://rlbot_urdf/meshes/heap_left.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://rlbot_urdf/meshes/heap_left.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="x_heap_left"
+    type="revolute">
+    <origin
+      xyz="0 -0.0615245547254961 0.0173452949419214"
+      rpy="1.5707963267949 0 0" />
+    <parent
+      link="body" />
+    <child
+      link="heap_left" />
+    <axis
+      xyz="1 0 0" />
+    <limit
+      lower="-1.57"
+      upper="1.57"
+      effort="0"
+      velocity="0.8" />
+    <safety_controller
+      soft_upper="1.2"
+      soft_lower="-1.2"
+      k_velocity="0" />
+  </joint>
+  <link
+    name="thigh_left">
+    <inertial>
+      <origin
+        xyz="0.00573576436351047 -3.46944695195361E-18 -0.00819152044288994"
+        rpy="0 0 0" />
+      <mass
+        value="0.0055707963267949" />
+      <inertia
+        ixx="4.46081048793808E-07"
+        ixy="2.72436662312673E-24"
+        ixz="1.52111004251165E-07"
+        iyy="4.10047920097761E-07"
+        iyz="-1.26696608363311E-24"
+        izz="3.35353293090279E-07" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://rlbot_urdf/meshes/thigh_left.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://rlbot_urdf/meshes/thigh_left.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="y_heap_left"
+    type="revolute">
+    <origin
+      xyz="-0.000411442702803559 0 -0.02"
+      rpy="0 0 0" />
+    <parent
+      link="heap_left" />
+    <child
+      link="thigh_left" />
+    <axis
+      xyz="0 1 0" />
+    <limit
+      lower="-1.57"
+      upper="1.57"
+      effort="0"
+      velocity="0.8" />
+    <safety_controller
+      soft_upper="1.2"
+      soft_lower="-1.2"
+      k_velocity="0" />
+  </joint>
+  <link
+    name="calf_left">
+    <inertial>
+      <origin
+        xyz="-0.00684040286651337 -3.46944695195361E-18 -0.0187938524157182"
+        rpy="0 0 0" />
+      <mass
+        value="0.00957079632679489" />
+      <inertia
+        ixx="1.95108843054461E-06"
+        ixy="2.57949540773636E-23"
+        ixz="-5.66183995396682E-07"
+        iyy="1.91462015146956E-06"
+        iyz="-2.79532002518431E-23"
+        izz="6.01584809377936E-07" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://rlbot_urdf/meshes/calf_left.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://rlbot_urdf/meshes/calf_left.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="y_knee_left"
+    type="revolute">
+    <origin
+      xyz="0.0114715287270209 0 -0.0163830408857799"
+      rpy="0 0 0" />
+    <parent
+      link="thigh_left" />
+    <child
+      link="calf_left" />
+    <axis
+      xyz="0 1 0" />
+    <limit
+      lower="-1.57"
+      upper="1.57"
+      effort="0"
+      velocity="0.8" />
+    <safety_controller
+      soft_upper="1.2"
+      soft_lower="-1.2"
+      k_velocity="0" />
+  </joint>
+  <link
+    name="ankle_left">
+    <inertial>
+      <origin
+        xyz="1.92864740509655E-07 -4.00732348346255E-09 -0.00797861362318884"
+        rpy="0 0 0" />
+      <mass
+        value="0.00523290759017616" />
+      <inertia
+        ixx="4.10620399521421E-07"
+        ixy="-4.22283939288613E-12"
+        ixz="-1.23937856088848E-11"
+        iyy="4.86191504605819E-07"
+        iyz="3.60089597672155E-13"
+        izz="2.17218632314309E-07" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://rlbot_urdf/meshes/ankle_left.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://rlbot_urdf/meshes/ankle_left.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="y_ankle_left"
+    type="revolute">
+    <origin
+      xyz="-0.0136808057330267 0 -0.0375877048314363"
+      rpy="0 0 0" />
+    <parent
+      link="calf_left" />
+    <child
+      link="ankle_left" />
+    <axis
+      xyz="0 1 0" />
+    <limit
+      lower="-1.57"
+      upper="1.57"
+      effort="0"
+      velocity="0.8" />
+    <safety_controller
+      soft_upper="1.2"
+      soft_lower="-1.2"
+      k_velocity="0" />
+  </joint>
+  <link
+    name="foot_left">
+    <inertial>
+      <origin
+        xyz="0 0.00347894965825279 -0.00295481106111833"
+        rpy="0 0 0" />
+      <mass
+        value="0.00620877049737134" />
+      <inertia
+        ixx="4.38162388570232E-07"
+        ixy="2.80718675350762E-25"
+        ixz="1.69795173904356E-25"
+        iyy="1.66535450764884E-06"
+        iyz="1.17760810798441E-08"
+        izz="2.06672591407948E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://rlbot_urdf/meshes/foot_left.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://rlbot_urdf/meshes/foot_left.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="x_foot_left"
+    type="revolute">
+    <origin
+      xyz="0 0 -0.02"
+      rpy="0 0 0" />
+    <parent
+      link="ankle_left" />
+    <child
+      link="foot_left" />
+    <axis
+      xyz="1 0 0" />
+    <limit
+      lower="-1.57"
+      upper="1.57"
+      effort="0"
+      velocity="0.8" />
+    <safety_controller
+      soft_upper="1.2"
+      soft_lower="-1.2"
+      k_velocity="0" />
+  </joint>
+  <link
+    name="heap_right">
+    <inertial>
+      <origin
+        xyz="-0.000411505725811945 2.85574233531427E-09 -0.00865063393651721"
+        rpy="0 0 0" />
+      <mass
+        value="0.00641562289440222" />
+      <inertia
+        ixx="6.40403705648257E-07"
+        ixy="6.33816152503917E-16"
+        ixz="3.34815609251461E-12"
+        iyy="5.39585585992358E-07"
+        iyz="-3.31390027224661E-14"
+        izz="2.80842564038951E-07" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://rlbot_urdf/meshes/heap_right.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://rlbot_urdf/meshes/heap_right.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="x_heap_right"
+    type="revolute">
+    <origin
+      xyz="0 -0.0615245547254959 -0.00865470505807863"
+      rpy="1.57107948054706 0 0" />
+    <parent
+      link="body" />
+    <child
+      link="heap_right" />
+    <axis
+      xyz="1 0 0" />
+    <limit
+      lower="-1.57"
+      upper="1.57"
+      effort="0"
+      velocity="0.8" />
+    <safety_controller
+      soft_upper="1.2"
+      soft_lower="-1.2"
+      k_velocity="0" />
+  </joint>
+  <link
+    name="thigh_right">
+    <inertial>
+      <origin
+        xyz="0.00573576436803753 -1.13328102128302E-08 -0.0081915204397122"
+        rpy="0 0 0" />
+      <mass
+        value="0.00557079632679491" />
+      <inertia
+        ixx="4.46081048625134E-07"
+        ixy="-6.84426747647289E-14"
+        ixz="1.52111004312217E-07"
+        iyy="4.10047920097891E-07"
+        iyz="-2.98616168863724E-13"
+        izz="3.35353293258825E-07" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://rlbot_urdf/meshes/thigh_right.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://rlbot_urdf/meshes/thigh_right.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="y_thigh_right"
+    type="revolute">
+    <origin
+      xyz="-0.000411442702803607 0 -0.0200000000000006"
+      rpy="0 -0.00690975570248467 0" />
+    <parent
+      link="heap_right" />
+    <child
+      link="thigh_right" />
+    <axis
+      xyz="0 0.999999999998086 0" />
+    <limit
+      lower="-1.57"
+      upper="1.57"
+      effort="0"
+      velocity="0.8" />
+    <safety_controller
+      soft_upper="1.2"
+      soft_lower="-1.2"
+      k_velocity="0" />
+  </joint>
+  <link
+    name="calf_right">
+    <inertial>
+      <origin
+        xyz="-0.00684040287104044 -5.87042904912072E-09 -0.0187938524140695"
+        rpy="0 0 0" />
+      <mass
+        value="0.00957079632679489" />
+      <inertia
+        ixx="1.95108843027167E-06"
+        ixy="2.95920156047589E-14"
+        ixz="-5.66183995721723E-07"
+        iyy="1.91462015146958E-06"
+        iyz="-4.85278129627917E-13"
+        izz="6.01584809650852E-07" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://rlbot_urdf/meshes/calf_right.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://rlbot_urdf/meshes/calf_right.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="y_knee_right"
+    type="revolute">
+    <origin
+      xyz="0.011471528736075 0 -0.0163830408794246"
+      rpy="0 0.00991579292267587 0" />
+    <parent
+      link="thigh_right" />
+    <child
+      link="calf_right" />
+    <axis
+      xyz="0 0.999999999999638 0" />
+    <limit
+      lower="-1.57"
+      upper="1.57"
+      effort="0"
+      velocity="0.8" />
+    <safety_controller
+      soft_upper="1.2"
+      soft_lower="-1.2"
+      k_velocity="0" />
+  </joint>
+  <link
+    name="ankle_right">
+    <inertial>
+      <origin
+        xyz="1.92837492619946E-07 -4.02335108284912E-09 -0.00797861365324166"
+        rpy="0 0 0" />
+      <mass
+        value="0.00523290757273802" />
+      <inertia
+        ixx="4.10620398380925E-07"
+        ixy="-4.22180887851016E-12"
+        ixz="-1.2392522253023E-11"
+        iyy="4.8619150328856E-07"
+        iyz="3.60956824099644E-13"
+        izz="2.1721863237797E-07" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://rlbot_urdf/meshes/ankle_right.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://rlbot_urdf/meshes/ankle_right.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="y_ankle_right"
+    type="revolute">
+    <origin
+      xyz="-0.0136808057420809 0 -0.0375877048281388"
+      rpy="0 -0.00300603722021734 0" />
+    <parent
+      link="calf_right" />
+    <child
+      link="ankle_right" />
+    <axis
+      xyz="0 1 0" />
+    <limit
+      lower="-1.57"
+      upper="1.57"
+      effort="0"
+      velocity="0.8" />
+    <safety_controller
+      soft_upper="1.2"
+      soft_lower="-1.2"
+      k_velocity="0" />
+  </joint>
+  <link
+    name="foot_right">
+    <inertial>
+      <origin
+        xyz="9.54097911787244E-18 0.00347894965825279 -0.00295481106111833"
+        rpy="0 0 0" />
+      <mass
+        value="0.00620877049737134" />
+      <inertia
+        ixx="4.38162388570232E-07"
+        ixy="3.7636078317022E-22"
+        ixz="3.82438483940359E-24"
+        iyy="1.66535450764884E-06"
+        iyz="1.1776081079844E-08"
+        izz="2.06672591407948E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://rlbot_urdf/meshes/foot_right.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://rlbot_urdf/meshes/foot_right.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="x_foot_right"
+    type="revolute">
+    <origin
+      xyz="0 0 -0.02"
+      rpy="-0.0010361611293162 0 -3.14159265358979" />
+    <parent
+      link="ankle_right" />
+    <child
+      link="foot_right" />
+    <axis
+      xyz="1 0 0" />
+    <limit
+      lower="-1.57"
+      upper="1.57"
+      effort="0"
+      velocity="0.8" />
+    <safety_controller
+      soft_upper="1.2"
+      soft_lower="-1.2"
+      k_velocity="0" />
+  </joint>
+  <link
+    name="shoulder_left">
+    <inertial>
+      <origin
+        xyz="-1.36398935124057E-08 -0.000866673619538731 -1.20257475832025E-05"
+        rpy="0 0 0" />
+      <mass
+        value="0.00257265949387042" />
+      <inertia
+        ixx="1.0176435540391E-07"
+        ixy="1.28888606047439E-13"
+        ixz="4.84105895363423E-13"
+        iyy="9.2978669092334E-08"
+        iyz="-1.37174693858468E-10"
+        izz="1.02841048062657E-07" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://rlbot_urdf/meshes/shoulder_left.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://rlbot_urdf/meshes/shoulder_left.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="y_shoulder_left"
+    type="revolute">
+    <origin
+      xyz="-0.00262071970880938 -0.0975538090082797 0.0359498264509925"
+      rpy="1.55689910386181 0 -0.0066325274140378" />
+    <parent
+      link="body" />
+    <child
+      link="shoulder_left" />
+    <axis
+      xyz="0 0.999903435151542 0.013896775602466" />
+    <limit
+      lower="-1.57"
+      upper="1.57"
+      effort="0"
+      velocity="0.8" />
+    <safety_controller
+      soft_upper="1.2"
+      soft_lower="-1.2"
+      k_velocity="0" />
+  </joint>
+  <link
+    name="arm_left">
+    <inertial>
+      <origin
+        xyz="-1.77809156287623E-17 0.0412752517915709 0.123253842240176"
+        rpy="0 0 0" />
+      <mass
+        value="0.00328539816339746" />
+      <inertia
+        ixx="3.25244273406656E-07"
+        ixy="-6.40095622448261E-24"
+        ixz="3.83605009071467E-23"
+        iyy="2.94856667782799E-07"
+        iyz="8.79848096978728E-08"
+        izz="8.51442416804815E-08" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://rlbot_urdf/meshes/arm_left.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://rlbot_urdf/meshes/arm_left.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="x_shoulder_left"
+    type="revolute">
+    <origin
+      xyz="0 -0.0316050525216683 -0.134925020385111"
+      rpy="0 0 0" />
+    <parent
+      link="shoulder_left" />
+    <child
+      link="arm_left" />
+    <axis
+      xyz="1 0 0" />
+    <limit
+      lower="-1.57"
+      upper="1.57"
+      effort="0"
+      velocity="0.8" />
+    <safety_controller
+      soft_upper="1.2"
+      soft_lower="-1.2"
+      k_velocity="0" />
+  </joint>
+  <link
+    name="forearm_left">
+    <inertial>
+      <origin
+        xyz="-5.63785129692462E-18 2.77555756156289E-17 -0.0199999999999999"
+        rpy="0 0 0" />
+      <mass
+        value="0.00478539816339743" />
+      <inertia
+        ixx="9.57310075734774E-07"
+        ixy="1.80945758995975E-24"
+        ixz="-4.67512142457314E-22"
+        iyy="9.58946321908519E-07"
+        iyz="2.71315240917393E-22"
+        izz="7.81203898828789E-08" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://rlbot_urdf/meshes/forearm_left.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://rlbot_urdf/meshes/forearm_left.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="x_elbow_left"
+    type="revolute">
+    <origin
+      xyz="0 0.0455505035831425 0.111507684480351"
+      rpy="-0.0366953074138193 0 0" />
+    <parent
+      link="arm_left" />
+    <child
+      link="forearm_left" />
+    <axis
+      xyz="1 0 0" />
+    <limit
+      lower="-1.57"
+      upper="1.57"
+      effort="0"
+      velocity="0.8" />
+    <safety_controller
+      soft_upper="1.2"
+      soft_lower="-1.2"
+      k_velocity="0" />
+  </joint>
+  <link
+    name="shoulder_right">
+    <inertial>
+      <origin
+        xyz="-1.36398935141405E-08 0.000320618019877782 -1.06498535014654E-05"
+        rpy="0 0 0" />
+      <mass
+        value="0.00257265949387043" />
+      <inertia
+        ixx="1.0176435540391E-07"
+        ixy="-1.51510566065525E-13"
+        ixz="-4.77509517574675E-13"
+        iyy="9.29875905349879E-08"
+        iyz="3.26686321891725E-10"
+        izz="1.02832126620003E-07" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://rlbot_urdf/meshes/shoulder_right.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://rlbot_urdf/meshes/shoulder_right.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="y_shoulder_right"
+    type="revolute">
+    <origin
+      xyz="-0.00262071970880929 -0.0975538090082805 -0.0267132743654099"
+      rpy="1.60394033868225 0 -0.0034234067129337" />
+    <parent
+      link="body" />
+    <child
+      link="shoulder_right" />
+    <axis
+      xyz="0 -0.999450787517761 0.0331379439634823" />
+    <limit
+      lower="-1.57"
+      upper="1.57"
+      effort="0"
+      velocity="0.8" />
+    <safety_controller
+      soft_upper="1.2"
+      soft_lower="-1.2"
+      k_velocity="0" />
+  </joint>
+  <link
+    name="arm_right">
+    <inertial>
+      <origin
+        xyz="3.46944695195361E-18 -0.0412752517915708 0.123253842240176"
+        rpy="0 0 0" />
+      <mass
+        value="0.00328539816339746" />
+      <inertia
+        ixx="3.25244273406655E-07"
+        ixy="-2.3910689581611E-24"
+        ixz="-1.05207034159088E-23"
+        iyy="2.94856667782798E-07"
+        iyz="-8.79848096978727E-08"
+        izz="8.51442416804816E-08" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://rlbot_urdf/meshes/arm_right.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://rlbot_urdf/meshes/arm_right.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="x_shoulder_right"
+    type="revolute">
+    <origin
+      xyz="0 0.03106183241523 -0.134803113202643"
+      rpy="0 0 0" />
+    <parent
+      link="shoulder_right" />
+    <child
+      link="arm_right" />
+    <axis
+      xyz="1 0 0" />
+    <limit
+      lower="-1.57"
+      upper="1.57"
+      effort="0"
+      velocity="0.8" />
+    <safety_controller
+      soft_upper="1.2"
+      soft_lower="-1.2"
+      k_velocity="0" />
+  </joint>
+  <link
+    name="forearm_right">
+    <inertial>
+      <origin
+        xyz="1.73472347597681E-18 0 -0.02"
+        rpy="0 0 0" />
+      <mass
+        value="0.00478539816339743" />
+      <inertia
+        ixx="9.57310075734775E-07"
+        ixy="2.50739123180137E-24"
+        ixz="-2.72194120318231E-23"
+        iyy="9.5894632190852E-07"
+        iyz="6.45200877791362E-22"
+        izz="7.8120389882879E-08" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://rlbot_urdf/meshes/forearm_right.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://rlbot_urdf/meshes/forearm_right.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="x_elbow_right"
+    type="revolute">
+    <origin
+      xyz="0 -0.0455505035831417 0.111507684480352"
+      rpy="0.0372396712544754 0 0" />
+    <parent
+      link="arm_right" />
+    <child
+      link="forearm_right" />
+    <axis
+      xyz="1 0 0" />
+    <limit
+      lower="-1.57"
+      upper="1.57"
+      effort="0"
+      velocity="0.8" />
+    <safety_controller
+      soft_upper="1.2"
+      soft_lower="-1.2"
+      k_velocity="0" />
+  </joint>
+</robot>
