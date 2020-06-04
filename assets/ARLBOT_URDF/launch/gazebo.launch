@@ -10,7 +10,7 @@
     name="spawn_model"
     pkg="gazebo_ros"
     type="spawn_model"
-    args="-file $(find Assem1)/urdf/Assem1.urdf -urdf -model Assem1"
+    args="-file $(find ARLBOT_URDF)/urdf/ARLBOT_URDF.urdf -urdf -model ARLBOT_URDF"
     output="screen" />
   <node
     name="fake_joint_calibration"

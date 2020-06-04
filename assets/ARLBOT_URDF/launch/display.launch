@@ -6,7 +6,7 @@
     default="False" />
   <param
     name="robot_description"
-    textfile="$(find Assem1)/urdf/Assem1.urdf" />
+    textfile="$(find ARLBOT_URDF)/urdf/ARLBOT_URDF.urdf" />
   <param
     name="use_gui"
     value="$(arg gui)" />
@@ -22,5 +22,5 @@
     name="rviz"
     pkg="rviz"
     type="rviz"
-    args="-d $(find Assem1)/urdf.rviz" />
+    args="-d $(find ARLBOT_URDF)/urdf.rviz" />
 </launch>

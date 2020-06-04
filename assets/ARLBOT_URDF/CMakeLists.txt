@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 2.8.3)
 
-project(Assem1)
+project(ARLBOT_URDF)
 
 find_package(catkin REQUIRED)
 
